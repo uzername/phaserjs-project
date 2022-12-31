@@ -21,19 +21,19 @@ export class Player extends ActorMain {
 
         if ((this.keyFront.isDown) || (this.keyFrontNum.isDown)) {
             // moving to front             
-            this.setTexture('hobgoblin_controllable_sprites', 0);
+            this.setTexture('hobgoblin_controllable_sprites', 2);
         }
         if ((this.keyLeft.isDown) || (this.keyLeftNum.isDown)) {
             // moving to left
-            this.setTexture('hobgoblin_controllable_sprites', 1);
+            this.setTexture('hobgoblin_controllable_sprites', 0);
         }
         if ((this.keyBack.isDown) || (this.keyBackNum.isDown)) {
             // moving to back
-            this.setTexture('hobgoblin_controllable_sprites', 2);
+            this.setTexture('hobgoblin_controllable_sprites', 3);
         }
         if ((this.keyRight.isDown) || (this.keyRightNum.isDown)) {
             // moving to right
-            this.setTexture('hobgoblin_controllable_sprites', 3);
+            this.setTexture('hobgoblin_controllable_sprites', 1);
         }
     }
 }

@@ -27,7 +27,7 @@ export class scene1 extends Phaser.Scene {
         
         WallLayer.setCollisionByProperty({ collides: true });
 
-        this.player = new Player(this, 0+32/2, 0+32/2);
+        this.player = new Player(this, 1*32+32/2, 1*32+32/2);
         console.log("scene1");
     }
     update() {

@@ -1,9 +1,16 @@
 import Phaser from 'phaser';
 import { Player } from './PlayerActor.js';
+import { UtilClass } from './Utils.js'
 
-export class scene1 extends Phaser.Scene {
+export class SceneMansion extends Phaser.Scene {
+    FloorsLayer = null;
+    StairsLayer = null;
+    WallLayer = null;
+    DecorLayer = null;
+    player = null;
+
     constructor() {
-        super("scene1");
+        super("SceneMansion");
     }
     preload() {
 
@@ -18,19 +25,31 @@ export class scene1 extends Phaser.Scene {
         let tilesetWall = map.addTilesetImage("tilesetwalls", "tilesetwalls_");
         let tilesetStatue = map.addTilesetImage("tilesetstatues", "tilesetstatues_");
 
-        const FloorsLayer = map.createLayer("Floors", tilesetFloors);
-        const StairsLayer = map.createLayer("stairs", tilesetStairs);
-        const WallLayer = map.createLayer("Walls", tilesetWall);
-        const DecorLayer = map.createLayer("Decor", tilesetStatue);
-        
-        
-        
-        WallLayer.setCollisionByProperty({ collides: true });
-
-        this.player = new Player(this, 1*32+32/2, 1*32+32/2);
-        console.log("scene1");
+        this.FloorsLayer = map.createLayer("Floors", tilesetFloors);
+        this.StairsLayer = map.createLayer("stairs", tilesetStairs);
+        this.WallLayer = map.createLayer("Walls", tilesetWall);
+        this.DecorLayer = map.createLayer("Decor", tilesetStatue);
+        // Using the this.map.filterObjects() function, select the required objects from the required layer. 
+        // The first argument is the layers name, the second one is the callback function for filtering. 
+        this.spawnPoints = map.filterObjects("playerspawns", obj => obj.name === "playerspawn");
+        this.WallLayer.setCollisionByProperty({ collides: true });
+        // spawnpoint 0 is always there. put there player
+        var playerXpixel = this.spawnPoints[0].x; var playerYpixel = this.spawnPoints[0].y;
+        this.player = new Player(this, playerXpixel + UtilClass.SPRITEWIDTH / 2, playerYpixel + UtilClass.SPRITEHEIGHT / 2);
+        this.initCamera();
+        console.log("Scene Mansion created");
     }
     update() {
         this.player.update();
     }
+    // bind camera to player
+    initCamera() {
+        //this.cameras.main.setSize(this.game.scale.width, this.game.scale.height);
+        this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
+    }
+    // check whether this tile is wall
+    checkIsWall(xPixel, yPixel) {
+        return false;
+    }
+
 }

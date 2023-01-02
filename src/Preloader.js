@@ -14,7 +14,7 @@ export class Preloader extends Phaser.Scene {
         console.log("preloader");
     }
     create() {
-        this.scene.start("scene1");
+        this.scene.start("SceneMansion");
     }
    
 }

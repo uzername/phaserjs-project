@@ -1,5 +1,6 @@
 /// https://github.com/photonstorm/phaser3-examples/blob/master/public/src/animation/create%20animation%20from%20sprite%20sheet.js
 import { ActorMain } from './ActorMain';
+import { UtilClass } from './Utils';
 export class Player extends ActorMain {
     /// scene and coordinates to use
     constructor(scene, x, y) {
@@ -18,22 +19,34 @@ export class Player extends ActorMain {
         
     }
     update() {
-
-        if ((this.keyFront.isDown) || (this.keyFrontNum.isDown)) {
-            // moving to front             
-            this.setTexture('hobgoblin_controllable_sprites', 2);
+        // inspired by tileset movement example
+        if (Phaser.Input.Keyboard.JustDown(this.keyFront) || Phaser.Input.Keyboard.JustDown(this.keyFrontNum)) {
+            // moving to front    
+            if (!this.scene.checkIsWall(this.x, this.y + UtilClass.SPRITEHEIGHT)) {
+                this.y -= UtilClass.SPRITEHEIGHT;
+            }
+            this.setFrame(3);
         }
-        if ((this.keyLeft.isDown) || (this.keyLeftNum.isDown)) {
+        if (Phaser.Input.Keyboard.JustDown(this.keyLeft) || Phaser.Input.Keyboard.JustDown(this.keyLeftNum)) {
             // moving to left
-            this.setTexture('hobgoblin_controllable_sprites', 0);
+            if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y )) {
+                this.x -= UtilClass.SPRITEWIDTH;
+            }
+            this.setFrame(0);
         }
-        if ((this.keyBack.isDown) || (this.keyBackNum.isDown)) {
+        if (Phaser.Input.Keyboard.JustDown(this.keyBack) || Phaser.Input.Keyboard.JustDown(this.keyBackNum)) {
             // moving to back
-            this.setTexture('hobgoblin_controllable_sprites', 3);
+            if (!this.scene.checkIsWall(this.x, this.y - UtilClass.SPRITEHEIGHT)) {
+                this.y += UtilClass.SPRITEHEIGHT;
+            }
+            this.setFrame(2);
         }
-        if ((this.keyRight.isDown) || (this.keyRightNum.isDown)) {
+        if (Phaser.Input.Keyboard.JustDown(this.keyRight) || Phaser.Input.Keyboard.JustDown(this.keyRightNum)) {
             // moving to right
-            this.setTexture('hobgoblin_controllable_sprites', 1);
+            if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y)) {
+                this.x += UtilClass.SPRITEWIDTH;
+            }
+            this.setFrame(1);
         }
     }
 }

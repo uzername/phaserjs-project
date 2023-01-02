@@ -1,5 +1,5 @@
 import Phaser, { Physics } from 'phaser';
-import { scene1 } from "./src/Game.js"
+import { SceneMansion } from "./src/Game.js"
 import { Preloader } from "./src/Preloader.js"
 
 const config = {
@@ -7,7 +7,7 @@ const config = {
     width: 800,
     height: 600,
     pixelArt: true,
-    scene: [Preloader,scene1],
+    scene: [Preloader, SceneMansion],
     physics: {
         default: "arcade",
         arcade: {

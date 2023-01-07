@@ -22,7 +22,7 @@ export class Player extends ActorMain {
         // inspired by tileset movement example
         if (Phaser.Input.Keyboard.JustDown(this.keyFront) || Phaser.Input.Keyboard.JustDown(this.keyFrontNum)) {
             // moving to front    
-            if (!this.scene.checkIsWall(this.x, this.y + UtilClass.SPRITEHEIGHT)) {
+            if (!this.scene.checkIsWall(this.x, this.y - UtilClass.SPRITEHEIGHT)) {
                 this.y -= UtilClass.SPRITEHEIGHT;
             }
             this.setFrame(3);
@@ -36,7 +36,7 @@ export class Player extends ActorMain {
         }
         if (Phaser.Input.Keyboard.JustDown(this.keyBack) || Phaser.Input.Keyboard.JustDown(this.keyBackNum)) {
             // moving to back
-            if (!this.scene.checkIsWall(this.x, this.y - UtilClass.SPRITEHEIGHT)) {
+            if (!this.scene.checkIsWall(this.x, this.y + UtilClass.SPRITEHEIGHT)) {
                 this.y += UtilClass.SPRITEHEIGHT;
             }
             this.setFrame(2);

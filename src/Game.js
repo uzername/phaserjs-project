@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { Player } from './PlayerActor.js';
 import { UtilClass } from './Utils.js'
+import { MessageService } from './MessageService.js'
 
 export class SceneMansion extends Phaser.Scene {
     FloorsLayer = null;
@@ -38,18 +39,24 @@ export class SceneMansion extends Phaser.Scene {
         this.player = new Player(this, playerXpixel + UtilClass.SPRITEWIDTH / 2, playerYpixel + UtilClass.SPRITEHEIGHT / 2);
         this.initCamera();
         console.log("Scene Mansion created");
+        MessageService.addMessage("You have stumbled across the abandoned mansion. You feel that owner may arrive soon");
     }
     update() {
         this.player.update();
     }
     // bind camera to player
     initCamera() {
-        //this.cameras.main.setSize(this.game.scale.width, this.game.scale.height);
-        this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
+        this.cameras.main.startFollow(this.player, true, 1, 1);
     }
     // check whether this tile is wall
     checkIsWall(xPixel, yPixel) {
-        return false;
+        var tileWall = this.WallLayer.getTileAtWorldXY(xPixel, yPixel, true, this.cameras.main);
+        if ((tileWall.index != -1) && ('collides' in tileWall.properties) && (tileWall.properties.collides == true)) {
+            return true;
+        } else {
+            return false;
+        }
+        
     }
 
 }

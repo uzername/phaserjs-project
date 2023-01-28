@@ -48,10 +48,16 @@ export class SceneMansion extends Phaser.Scene {
     initCamera() {
         this.cameras.main.startFollow(this.player, true, 1, 1);
     }
-    // check whether this tile is wall
+    // check whether this tile is wall. Or door
     checkIsWall(xPixel, yPixel) {
         var tileWall = this.WallLayer.getTileAtWorldXY(xPixel, yPixel, true, this.cameras.main);
-        if ((tileWall.index != -1) && ('collides' in tileWall.properties) && (tileWall.properties.collides == true)) {
+        if ((tileWall != null) && (tileWall.index != -1) && ('collides' in tileWall.properties) && (tileWall.properties.collides == true)) {
+            if (('doorstate' in tileWall.properties) && (tileWall.properties.doorstate == "CLOSED")) {
+                tileWall.properties.doorstate = "OPEN"                
+                // now - I found closed door -  change it to opened
+                this.WallLayer.removeTileAtWorldXY(xPixel, yPixel);
+                this.WallLayer.putTileAtWorldXY(tileWall.index+3, xPixel, yPixel)
+            }
             return true;
         } else {
             return false;

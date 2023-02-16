@@ -48,15 +48,96 @@ export class SceneMansion extends Phaser.Scene {
     initCamera() {
         this.cameras.main.startFollow(this.player, true, 1, 1);
     }
+    // close door at xPixel, yPixel
+    closeDoor(xPixel, yPixel) {
+        var tileWall = this.WallLayer.getTileAtWorldXY(xPixel, yPixel, true, this.cameras.main);        
+            if (('doorstate' in tileWall.properties) && (tileWall.properties.doorstate == "OPEN")) {
+                tileWall.properties.doorstate = "CLOSED"
+                // now - I found  door -  change it to closed
+                this.WallLayer.removeTileAtWorldXY(xPixel, yPixel);
+                this.WallLayer.putTileAtWorldXY(tileWall.index - 3, xPixel, yPixel)
+                var tmpTile = this.WallLayer.getTileAtWorldXY(xPixel, yPixel, true, this.cameras.main);
+                tmpTile.properties.doorstate = "CLOSED";
+                tmpTile.properties.collides = true;
+
+                if ((tileWall.index >= UtilClass.LONGDOORH_STARTINDEX) && (tileWall.index <= UtilClass.LONGDOORH_ENDINDEX)) {
+                    // seek for all horizontal doors tiles and open them too
+                    var horizontalClosingFunction = function (dH, thisthis) {
+                        var ptrdoor = 1; var proceedHorizontal = true;
+                        while (proceedHorizontal) {
+                            var tileDoorH = thisthis.WallLayer.getTileAtWorldXY(xPixel + dH * ptrdoor * UtilClass.SPRITEWIDTH, yPixel, true, thisthis.cameras.main);
+                            if ((tileDoorH.index >= UtilClass.LONGDOORH_STARTINDEX) && (tileDoorH.index <= UtilClass.LONGDOORH_ENDINDEX)) {
+                                tileDoorH.properties.doorstate = "CLOSED";
+                                thisthis.WallLayer.removeTileAtWorldXY(xPixel + dH * ptrdoor * UtilClass.SPRITEWIDTH, yPixel);
+                                thisthis.WallLayer.putTileAtWorldXY(tileDoorH.index - 3, xPixel + dH * ptrdoor * UtilClass.SPRITEWIDTH, yPixel)
+                                tmpTile = thisthis.WallLayer.getTileAtWorldXY(xPixel + dH * ptrdoor * UtilClass.SPRITEWIDTH, yPixel, true, thisthis.cameras.main);
+                                tmpTile.properties.doorstate = "CLOSED";
+                                tmpTile.properties.collides = true;
+                            } else { proceedHorizontal = false; }
+                            ptrdoor++
+                        }
+                    }
+                    horizontalClosingFunction(-1, this);
+                    horizontalClosingFunction(+1, this);
+                }
+            }
+            
+    }
+    // try to use something. xPixel, yPixel - position of character in pixels
+    useSomething(xPixel, yPixel) {
+        // try to close door       
+        var tileTest0 = this.WallLayer.getTileAtWorldXY(xPixel, yPixel - UtilClass.SPRITEHEIGHT, true, this.cameras.main);
+        if ((tileTest0 != null) && (tileTest0.index != -1) && ('doorstate' in tileTest0.properties) && (tileTest0.properties.doorstate == "OPEN")) {
+            this.closeDoor(xPixel, yPixel - UtilClass.SPRITEHEIGHT);
+        } else {
+            tileTest0 = this.WallLayer.getTileAtWorldXY(xPixel, yPixel + UtilClass.SPRITEHEIGHT, true, this.cameras.main);
+            if ((tileTest0 != null) && (tileTest0.index != -1) && ('doorstate' in tileTest0.properties) && (tileTest0.properties.doorstate == "OPEN")) {
+                this.closeDoor(xPixel, yPixel + UtilClass.SPRITEHEIGHT);
+            } else {
+                tileTest0 = this.WallLayer.getTileAtWorldXY(xPixel - UtilClass.SPRITEWIDTH, yPixel, true, this.cameras.main);
+                if ((tileTest0 != null) && (tileTest0.index != -1) && ('doorstate' in tileTest0.properties) && (tileTest0.properties.doorstate == "OPEN")) {
+                    this.closeDoor(xPixel - UtilClass.SPRITEWIDTH, yPixel);
+                } else {
+                    tileTest0 = this.WallLayer.getTileAtWorldXY(xPixel + UtilClass.SPRITEWIDTH, yPixel, true, this.cameras.main);
+                    if ((tileTest0 != null) && (tileTest0.index != -1) && ('doorstate' in tileTest0.properties) && (tileTest0.properties.doorstate == "OPEN")) {
+                        this.closeDoor(xPixel + UtilClass.SPRITEWIDTH, yPixel);
+                    }
+                }
+            }
+        }
+
+    }
     // check whether this tile is wall. Or door
     checkIsWall(xPixel, yPixel) {
         var tileWall = this.WallLayer.getTileAtWorldXY(xPixel, yPixel, true, this.cameras.main);
         if ((tileWall != null) && (tileWall.index != -1) && ('collides' in tileWall.properties) && (tileWall.properties.collides == true)) {
-            if (('doorstate' in tileWall.properties) && (tileWall.properties.doorstate == "CLOSED")) {
-                tileWall.properties.doorstate = "OPEN"                
+            if (('doorstate' in tileWall.properties) && (tileWall.properties.doorstate == "CLOSED")) {                                
                 // now - I found closed door -  change it to opened
                 this.WallLayer.removeTileAtWorldXY(xPixel, yPixel);
-                this.WallLayer.putTileAtWorldXY(tileWall.index+3, xPixel, yPixel)
+                this.WallLayer.putTileAtWorldXY(tileWall.index + 3, xPixel, yPixel);
+                var tmpTile = this.WallLayer.getTileAtWorldXY(xPixel, yPixel, true, this.cameras.main);
+                tmpTile.properties.doorstate = "OPEN";
+                tmpTile.properties.collides = false;
+                if ((tileWall.index >= UtilClass.LONGDOORH_STARTINDEX)&& (tileWall.index <= UtilClass.LONGDOORH_ENDINDEX)) {
+                    // seek for all horizontal doors tiles and open them too
+                    var horizontalOpeningFunction = function (dH, thisthis) {
+                        var ptrdoor = 1; var proceedHorizontal = true;
+                        while (proceedHorizontal) {
+                            var tileDoorH = thisthis.WallLayer.getTileAtWorldXY(xPixel + dH * ptrdoor * UtilClass.SPRITEWIDTH, yPixel, true, thisthis.cameras.main);
+                            if ((tileDoorH.index >= UtilClass.LONGDOORH_STARTINDEX) && (tileDoorH.index <= UtilClass.LONGDOORH_ENDINDEX)) {
+                                tileDoorH.properties.doorstate = "OPEN";
+                                thisthis.WallLayer.removeTileAtWorldXY(xPixel +dH* ptrdoor * UtilClass.SPRITEWIDTH, yPixel);
+                                thisthis.WallLayer.putTileAtWorldXY(tileDoorH.index + 3, xPixel + dH * ptrdoor * UtilClass.SPRITEWIDTH, yPixel);                                
+                                tmpTile = thisthis.WallLayer.getTileAtWorldXY(xPixel + dH * ptrdoor * UtilClass.SPRITEWIDTH, yPixel, true, thisthis.cameras.main);
+                                tmpTile.properties.doorstate = "OPEN";
+                                tmpTile.properties.collides = false;
+                            } else { proceedHorizontal = false; }
+                            ptrdoor++
+                        }
+                    }
+                    horizontalOpeningFunction(-1,this);
+                    horizontalOpeningFunction(+1,this);
+                } 
             }
             return true;
         } else {

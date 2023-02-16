@@ -7,5 +7,6 @@ export class UtilClass {
 		var yNew = y * this.SPRITEHEIGHT + this.SPRITEHEIGHT / 2
 		return [xNew, yNew];
 	}
-	
+	static LONGDOORH_STARTINDEX = 194;
+	static LONGDOORH_ENDINDEX = 194 + 3 * 6; //six groups of long doors
 }

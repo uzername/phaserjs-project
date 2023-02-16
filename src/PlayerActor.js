@@ -19,6 +19,8 @@ export class Player extends ActorMain {
         this.keyBackLeft = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_ONE);
         this.keyFrontLeft = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_SEVEN);
         this.keyFrontRight = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_NINE);
+
+        this.keyUse = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
     }
     update() {
         // inspired by tileset movement example
@@ -82,6 +84,10 @@ export class Player extends ActorMain {
                 this.y -= UtilClass.SPRITEHEIGHT;
             }
             this.setFrame(1);
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.keyUse)) {
+            // trying to use something. Close a door...
+            this.scene.useSomething(this.x, this.y);
         }
     }
 }

@@ -17,22 +17,21 @@ export class SceneMansion extends Phaser.Scene {
 
     }
     create() {
-        let map = this.make.tilemap({ key: "mansion0" });
+        this.map = this.make.tilemap({ key: "map0" });
         
         
         
-        let tilesetFloors = map.addTilesetImage("tilesetfloors", "tilesetfloors_");
-        let tilesetStairs = map.addTilesetImage("tilesetstairs", "tilesetstairs_");
-        let tilesetWall = map.addTilesetImage("tilesetwalls", "tilesetwalls_");
-        let tilesetStatue = map.addTilesetImage("tilesetstatues", "tilesetstatues_");
-
-        this.FloorsLayer = map.createLayer("Floors", tilesetFloors);
-        this.StairsLayer = map.createLayer("stairs", tilesetStairs);
-        this.WallLayer = map.createLayer("Walls", tilesetWall);
-        this.DecorLayer = map.createLayer("Decor", tilesetStatue);
+        let tilesetFloors = this.map.addTilesetImage("tilesetfloors", "tilesetfloors_");
+        let tilesetStairs = this.map.addTilesetImage("tilesetstairs", "tilesetstairs_");
+        let tilesetWall = this.map.addTilesetImage("tilesetwalls", "tilesetwalls_");
+        let tilesetStatue = this.map.addTilesetImage("tilesetstatues", "tilesetstatues_");
+        this.FloorsLayer = this.map.createLayer("Floors", tilesetFloors);
+        this.StairsLayer = this.map.createLayer("Stairs", tilesetStairs);        
+        this.WallLayer = this.map.createLayer("Walls", tilesetWall);
+        this.DecorLayer = this.map.createLayer("Decor", tilesetStatue);
         // Using the this.map.filterObjects() function, select the required objects from the required layer. 
         // The first argument is the layers name, the second one is the callback function for filtering. 
-        this.spawnPoints = map.filterObjects("playerspawns", obj => obj.name === "playerspawn");
+        this.spawnPoints = this.map.filterObjects("playerspawns", obj => obj.name === "playerspawn");
         this.WallLayer.setCollisionByProperty({ collides: true });
         // spawnpoint 0 is always there. put there player
         var playerXpixel = this.spawnPoints[0].x; var playerYpixel = this.spawnPoints[0].y;
@@ -107,6 +106,16 @@ export class SceneMansion extends Phaser.Scene {
         }
 
     }
+    // ascend or descend - portal, stairs. Initiate scene reload
+    useStairsOrPortal(xPixel, yPixel, direction) {
+        console.log("[" + xPixel + ";" + yPixel + "]" + direction);
+        var objectParamCallback = function (obj) {
+            return ((xPixel - UtilClass.SPRITEWIDTH / 2 == obj.x) && (yPixel - UtilClass.SPRITEHEIGHT / 2 == obj.y))
+        }
+        var locatedObject = this.map.findObject("AccessPoints", objectParamCallback);
+        console.log(locatedObject);
+    }
+
     // check whether this tile is wall. Or door
     checkIsWall(xPixel, yPixel) {
         var tileWall = this.WallLayer.getTileAtWorldXY(xPixel, yPixel, true, this.cameras.main);

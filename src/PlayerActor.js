@@ -21,6 +21,8 @@ export class Player extends ActorMain {
         this.keyFrontRight = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_NINE);
 
         this.keyUse = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+        this.keyMvDownOrWait = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.PERIOD);
+        this.keyMvUp = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.COMMA);
     }
     update() {
         // inspired by tileset movement example
@@ -88,6 +90,18 @@ export class Player extends ActorMain {
         if (Phaser.Input.Keyboard.JustDown(this.keyUse)) {
             // trying to use something. Close a door...
             this.scene.useSomething(this.x, this.y);
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.keyMvUp)) {
+            if (this.keyMvUp.shiftKey) {
+                //console.log("UP")
+                this.scene.useStairsOrPortal(this.x, this.y, "UP");
+            }
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.keyMvDownOrWait)) {
+            if (this.keyMvUp.shiftKey) {
+                //console.log("DOWN")
+                this.scene.useStairsOrPortal(this.x, this.y, "DOWN");
+            }
         }
     }
 }

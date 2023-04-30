@@ -21,6 +21,7 @@ export class Player extends ActorMain {
         this.keyFrontRight = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.NUMPAD_NINE);
 
         this.keyUse = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+        this.keyTalk = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
         this.keyMvDownOrWait = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.PERIOD);
         this.keyMvUp = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.COMMA);
     }
@@ -91,6 +92,10 @@ export class Player extends ActorMain {
             // trying to use something. Close a door...
             this.scene.useSomething(this.x, this.y);
         }
+        if (Phaser.Input.Keyboard.JustDown(this.keyTalk)) {
+            this.scene.talkToSomeone(this.x, this.y);
+        }
+
         if (Phaser.Input.Keyboard.JustDown(this.keyMvUp)) {
             if (this.keyMvUp.shiftKey) {
                 //console.log("UP")
@@ -98,7 +103,7 @@ export class Player extends ActorMain {
             }
         }
         if (Phaser.Input.Keyboard.JustDown(this.keyMvDownOrWait)) {
-            if (this.keyMvUp.shiftKey) {
+            if (this.keyMvDownOrWait.shiftKey) {
                 //console.log("DOWN")
                 this.scene.useStairsOrPortal(this.x, this.y, "DOWN");
             }

@@ -10,6 +10,9 @@ export class MessageService {
         this.messageDivHtmlObject = gameDiv.appendChild(newDiv);
     }
     static addMessage(textMsg) {
-        this.messageDivHtmlObject.prepend(textMsg);
+        const newDiv = document.createElement("div");
+        newDiv.className = "singlemessage";
+        newDiv.textContent = textMsg;
+        this.messageDivHtmlObject.prepend(newDiv);
     }
 }

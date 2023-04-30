@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { Player } from './PlayerActor.js';
 import { UtilClass } from './Utils.js'
 import { MessageService } from './MessageService.js'
+import { StoryMode } from './StoryMode.js'
+import { ActorNPC } from './ActorNPC.js';
 
 export class SceneMansion extends Phaser.Scene {
     FloorsLayer = null;
@@ -9,6 +11,8 @@ export class SceneMansion extends Phaser.Scene {
     WallLayer = null;
     DecorLayer = null;
     player = null;
+    playerXpixel = 0; playerYpixel = 0;
+    currentNPCs = [];
 
     constructor() {
         super("SceneMansion");
@@ -16,29 +20,53 @@ export class SceneMansion extends Phaser.Scene {
     preload() {
 
     }
-    create() {
-        this.map = this.make.tilemap({ key: "map0" });
-        
-        
-        
+    // Defalut map: "map0"
+    loadActualMap(mapID) {
+        this.map = this.make.tilemap({ key: mapID });
         let tilesetFloors = this.map.addTilesetImage("tilesetfloors", "tilesetfloors_");
         let tilesetStairs = this.map.addTilesetImage("tilesetstairs", "tilesetstairs_");
         let tilesetWall = this.map.addTilesetImage("tilesetwalls", "tilesetwalls_");
         let tilesetStatue = this.map.addTilesetImage("tilesetstatues", "tilesetstatues_");
         this.FloorsLayer = this.map.createLayer("Floors", tilesetFloors);
-        this.StairsLayer = this.map.createLayer("Stairs", tilesetStairs);        
+        this.StairsLayer = this.map.createLayer("Stairs", tilesetStairs);
         this.WallLayer = this.map.createLayer("Walls", tilesetWall);
         this.DecorLayer = this.map.createLayer("Decor", tilesetStatue);
         // Using the this.map.filterObjects() function, select the required objects from the required layer. 
         // The first argument is the layers name, the second one is the callback function for filtering. 
         this.spawnPoints = this.map.filterObjects("playerspawns", obj => obj.name === "playerspawn");
-        this.WallLayer.setCollisionByProperty({ collides: true });
+        //this.WallLayer.setCollisionByProperty({ collides: true });
         // spawnpoint 0 is always there. put there player
-        var playerXpixel = this.spawnPoints[0].x; var playerYpixel = this.spawnPoints[0].y;
-        this.player = new Player(this, playerXpixel + UtilClass.SPRITEWIDTH / 2, playerYpixel + UtilClass.SPRITEHEIGHT / 2);
+        if (StoryMode.storyState == "INIT") {
+            this.playerXpixel = this.spawnPoints[0].x; this.playerYpixel = this.spawnPoints[0].y;
+        }
+        this.player = new Player(this, this.playerXpixel + UtilClass.SPRITEWIDTH / 2, this.playerYpixel + UtilClass.SPRITEHEIGHT / 2);
         this.initCamera();
-        console.log("Scene Mansion created");
-        MessageService.addMessage("You have stumbled across the abandoned mansion. You feel that owner may arrive soon");
+        console.log("map reloaded: " + mapID);
+        if (StoryMode.storyState == "INIT") {
+            MessageService.addMessage("You have stumbled across the abandoned mansion. You feel that owner may arrive soon");
+            StoryMode.storyState = "PROLOGUE";
+        } else {
+            MessageService.addMessage("You arrived to another location");
+        }
+    }
+
+    loadActualNPCs(mapID) {
+        this.currentNPCs.length = 0;
+        for (var singleNPC in StoryMode.storyNPCs[mapID]) {
+            var NPCinst = new ActorNPC(this,
+                StoryMode.storyNPCs[mapID][singleNPC].coordX * UtilClass.SPRITEWIDTH + UtilClass.SPRITEWIDTH / 2,
+                StoryMode.storyNPCs[mapID][singleNPC].coordY * UtilClass.SPRITEHEIGHT + StoryMode.storyNPCs[mapID][singleNPC].sizeH/2,
+                StoryMode.storyNPCs[mapID][singleNPC].sprite
+            )
+            NPCinst.Behavior = StoryMode.storyNPCs[mapID][singleNPC].isHostile;
+            NPCinst.Name = singleNPC;
+            NPCinst.setFrame(StoryMode.storyNPCs[mapID][singleNPC].sprite_index);
+            this.currentNPCs.push(NPCinst);
+        }
+    }
+    create() {        
+        this.loadActualMap(StoryMode.currentMap);        
+        this.loadActualNPCs(StoryMode.currentMap);
     }
     update() {
         this.player.update();
@@ -82,6 +110,10 @@ export class SceneMansion extends Phaser.Scene {
             }
             
     }
+    // try to talk to someone. Used to drive story. xPixel, yPixel - position of character in pixels
+    talkToSomeone(xPixel, yPixel) {
+
+    }
     // try to use something. xPixel, yPixel - position of character in pixels
     useSomething(xPixel, yPixel) {
         // try to close door       
@@ -113,7 +145,21 @@ export class SceneMansion extends Phaser.Scene {
             return ((xPixel - UtilClass.SPRITEWIDTH / 2 == obj.x) && (yPixel - UtilClass.SPRITEHEIGHT / 2 == obj.y))
         }
         var locatedObject = this.map.findObject("AccessPoints", objectParamCallback);
-        console.log(locatedObject);
+        if (locatedObject === null) {
+            MessageService.addMessage("You cannot leave this area right here");
+            return;
+        } else {
+            console.log(locatedObject.properties);
+            StoryMode.currentMap = locatedObject.properties.find(element => element.name == "destmap").value;
+            this.playerXpixel = locatedObject.properties.find(element => element.name == "destX").value;
+            this.playerYpixel = locatedObject.properties.find(element => element.name == "destY").value;
+            if ((StoryMode.currentMap == "") || (StoryMode.currentMap == null)) {
+                MessageService.addMessage("You have no idea where this path may take you. Better leave it");
+            } else {
+                this.player.destroy();
+                this.scene.restart();
+            }
+        }
     }
 
     // check whether this tile is wall. Or door

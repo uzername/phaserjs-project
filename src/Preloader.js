@@ -11,7 +11,10 @@ export class Preloader extends Phaser.Scene {
         //this.load.spritesheet('tilesetstairs_', require("/finalgraphics/stairs.png"), { frameWidth: 32, frameHeight: 32 });
         this.load.image('tilesetfloors_', require("/finalgraphics/floors.png"));
         this.load.tilemapTiledJSON('map0', require("/finalmaps/map0.json"));
+        this.load.tilemapTiledJSON('map0a', require("/finalmaps/map0a.json"));
         this.load.spritesheet('hobgoblin_controllable_sprites', require("/finalgraphics/hobgoblin_controllable.png"), { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('enchantress_controllable_sprites', require("/finalgraphics/enchantress_controllable.png"), { frameWidth: 32, frameHeight: 64 });
+        this.load.spritesheet('characters', require("/finalgraphics/characters.png"), { frameWidth: 32, frameHeight: 32 });
         console.log("preloader");
     }
     create() {

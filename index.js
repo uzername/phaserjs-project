@@ -24,3 +24,4 @@ const config = {
 const game = new Phaser.Game(config);
 
 MessageService.initMessageDiv(UtilClass.SPRITEHEIGHT * 3, config.width);
+MessageService.initDirectionsDiv(config.width, config.height);

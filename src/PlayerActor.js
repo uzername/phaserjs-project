@@ -1,10 +1,17 @@
 /// https://github.com/photonstorm/phaser3-examples/blob/master/public/src/animation/create%20animation%20from%20sprite%20sheet.js
 import { ActorMain } from './ActorMain';
+import { MessageService } from './MessageService';
 import { UtilClass } from './Utils';
-export class Player extends ActorMain {
+const inputMode = {
+    NONE: 0,
+    TALK: 1,
+    USE: 2
+}
+export class Player extends ActorMain {    
     /// scene and coordinates to use
     constructor(scene, x, y) {
         super(scene, x, y, 'hobgoblin_controllable_sprites', 0);
+        this.inputModeCurrent = inputMode.NONE;
         // KEYS
         this.keyFront = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.keyLeft = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -27,64 +34,113 @@ export class Player extends ActorMain {
     }
     update() {
         // inspired by tileset movement example
-        if (Phaser.Input.Keyboard.JustDown(this.keyFront) || Phaser.Input.Keyboard.JustDown(this.keyFrontNum)) {
-            // moving to front    
-            if (!this.scene.checkIsWall(this.x, this.y - UtilClass.SPRITEHEIGHT)) {
-                this.y -= UtilClass.SPRITEHEIGHT;
+        if (Phaser.Input.Keyboard.JustDown(this.keyFront) || Phaser.Input.Keyboard.JustDown(this.keyFrontNum)) {            
+            if (this.inputModeCurrent === inputMode.TALK) {
+                
+                this.inputModeCurrent = inputMode.NONE;
+                MessageService.toggleDirectionsDisplay();
+                this.scene.talkToSomeone(this.x, this.y);
+            } else {
+                // moving to front    
+                if (!this.scene.checkIsWall(this.x, this.y - UtilClass.SPRITEHEIGHT)) {
+                    this.y -= UtilClass.SPRITEHEIGHT;
+                }
             }
             this.setFrame(3);
         }
         if (Phaser.Input.Keyboard.JustDown(this.keyLeft) || Phaser.Input.Keyboard.JustDown(this.keyLeftNum)) {
-            // moving to left
-            if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y )) {
-                this.x -= UtilClass.SPRITEWIDTH;
+            if (this.inputModeCurrent === inputMode.TALK) {
+                this.inputModeCurrent = inputMode.NONE;
+                MessageService.toggleDirectionsDisplay();
+                this.scene.talkToSomeone(this.x, this.y);
+            } else {
+                // moving to left
+                if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y)) {
+                    this.x -= UtilClass.SPRITEWIDTH;
+                }
             }
             this.setFrame(0);
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.keyBack) || Phaser.Input.Keyboard.JustDown(this.keyBackNum)) {
-            // moving to back
-            if (!this.scene.checkIsWall(this.x, this.y + UtilClass.SPRITEHEIGHT)) {
-                this.y += UtilClass.SPRITEHEIGHT;
+            if (this.inputModeCurrent === inputMode.TALK) {
+                this.inputModeCurrent = inputMode.NONE;
+                MessageService.toggleDirectionsDisplay();
+                this.scene.talkToSomeone(this.x, this.y);
+            } else {
+                // moving to back
+                if (!this.scene.checkIsWall(this.x, this.y + UtilClass.SPRITEHEIGHT)) {
+                    this.y += UtilClass.SPRITEHEIGHT;
+                }
             }
             this.setFrame(2);
         }
         if (Phaser.Input.Keyboard.JustDown(this.keyRight) || Phaser.Input.Keyboard.JustDown(this.keyRightNum)) {
-            // moving to right
-            if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y)) {
-                this.x += UtilClass.SPRITEWIDTH;
+            if (this.inputModeCurrent === inputMode.TALK) {
+                this.inputModeCurrent = inputMode.NONE;
+                MessageService.toggleDirectionsDisplay();
+                this.scene.talkToSomeone(this.x, this.y);
+            } else {
+                // moving to right
+                if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y)) {
+                    this.x += UtilClass.SPRITEWIDTH;
+                }
             }
             this.setFrame(1);
         }
-        if (Phaser.Input.Keyboard.JustDown(this.keyBackRight) ) {
-            // moving to right and back
-            if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT)) {
-                this.x += UtilClass.SPRITEWIDTH;
-                this.y += UtilClass.SPRITEHEIGHT;
+        if (Phaser.Input.Keyboard.JustDown(this.keyBackRight)) {
+            if (this.inputModeCurrent === inputMode.TALK) {
+                this.inputModeCurrent = inputMode.NONE;
+                MessageService.toggleDirectionsDisplay();
+                this.scene.talkToSomeone(this.x, this.y);
+            } else {
+                // moving to right and back
+                if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT)) {
+                    this.x += UtilClass.SPRITEWIDTH;
+                    this.y += UtilClass.SPRITEHEIGHT;
+                }
             }
             this.setFrame(2);
         }
         if (Phaser.Input.Keyboard.JustDown(this.keyBackLeft)) {
-            // moving to left and back
-            if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT)) {
-                this.x -= UtilClass.SPRITEWIDTH;
-                this.y += UtilClass.SPRITEHEIGHT;
+            if (this.inputModeCurrent === inputMode.TALK) {
+                this.inputModeCurrent = inputMode.NONE;
+                MessageService.toggleDirectionsDisplay();
+                this.scene.talkToSomeone(this.x, this.y);
+            } else {
+                // moving to left and back
+                if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT)) {
+                    this.x -= UtilClass.SPRITEWIDTH;
+                    this.y += UtilClass.SPRITEHEIGHT;
+                }
             }
             this.setFrame(0);
         }
         if (Phaser.Input.Keyboard.JustDown(this.keyFrontLeft)) {
-            // moving to left and front
-            if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT)) {
-                this.x -= UtilClass.SPRITEWIDTH;
-                this.y -= UtilClass.SPRITEHEIGHT;
+            if (this.inputModeCurrent === inputMode.TALK) {
+                this.inputModeCurrent = inputMode.NONE;
+                MessageService.toggleDirectionsDisplay();
+                this.scene.talkToSomeone(this.x, this.y);
+            } else {
+                // moving to left and front
+                if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT)) {
+                    this.x -= UtilClass.SPRITEWIDTH;
+                    this.y -= UtilClass.SPRITEHEIGHT;
+                }
             }
             this.setFrame(3);
         }
         if (Phaser.Input.Keyboard.JustDown(this.keyFrontRight)) {
-            // moving to right and front
-            if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT)) {
-                this.x += UtilClass.SPRITEWIDTH;
-                this.y -= UtilClass.SPRITEHEIGHT;
+            if (this.inputModeCurrent === inputMode.TALK) {
+                this.inputModeCurrent = inputMode.NONE;
+                MessageService.toggleDirectionsDisplay();
+                this.scene.talkToSomeone(this.x, this.y);
+            } else {
+                // moving to right and front
+                if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT)) {
+                    this.x += UtilClass.SPRITEWIDTH;
+                    this.y -= UtilClass.SPRITEHEIGHT;
+                }
             }
             this.setFrame(1);
         }
@@ -93,7 +149,9 @@ export class Player extends ActorMain {
             this.scene.useSomething(this.x, this.y);
         }
         if (Phaser.Input.Keyboard.JustDown(this.keyTalk)) {
-            this.scene.talkToSomeone(this.x, this.y);
+            this.inputModeCurrent = inputMode.TALK;
+            MessageService.toggleDirectionsDisplay();
+            
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.keyMvUp)) {

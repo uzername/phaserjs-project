@@ -13,7 +13,8 @@ export class StoryMode {
                 "coordX": 42,
                 "coordY": 70,
                 "isHostile": 0,
-                "sizeH": UtilClass.SPRITEHEIGHTLARGE
+                "sizeH": UtilClass.SPRITEHEIGHTLARGE,
+                "name": "Enchantress"
             },
             "squad_goblin1": {
                 "sprite": "characters",
@@ -22,7 +23,8 @@ export class StoryMode {
                 "coordX": 45,
                 "coordY": 70,
                 "isHostile": 0,
-                "sizeH": UtilClass.SPRITEHEIGHT
+                "sizeH": UtilClass.SPRITEHEIGHT,
+                "name": "Trorl Gloomy"
             },
             "squad_goblin2": {
                 "sprite": "characters",
@@ -31,7 +33,8 @@ export class StoryMode {
                 "coordX": 46,
                 "coordY": 70,
                 "isHostile": 0,
-                "sizeH": UtilClass.SPRITEHEIGHT
+                "sizeH": UtilClass.SPRITEHEIGHT,
+                "name": "Truul Shady"
             },
             "squad_goblin3": {
                 "sprite": "characters",
@@ -40,7 +43,8 @@ export class StoryMode {
                 "coordX": 47,
                 "coordY": 71,
                 "isHostile": 0,
-                "sizeH": UtilClass.SPRITEHEIGHT
+                "sizeH": UtilClass.SPRITEHEIGHT,
+                "name": "Wrunk Chainmail"
             },
              "squad_goblin4": {
                 "sprite": "characters",
@@ -49,8 +53,20 @@ export class StoryMode {
                 "coordX": 49,
                  "coordY": 72,
                  "isHostile": 0,
-                 "sizeH": UtilClass.SPRITEHEIGHT
-            }
+                 "sizeH": UtilClass.SPRITEHEIGHT,
+                 "name": "Hedge Wizkid"
+            },
+            "squad_goblin5": {
+                "sprite": "characters",
+                "sprite_states": 1,
+                "sprite_index": 4,
+                "coordX": 49,
+                "coordY": 73,
+                "isHostile": 0,
+                "sizeH": UtilClass.SPRITEHEIGHT,
+                "name": "Robin Junior"
+            },
+            
         }
 
         }

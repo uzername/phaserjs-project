@@ -20,3 +20,41 @@ div#messages {
 div.singlemessage {
     width:100%;
 }
+div#directions {
+    display:none;
+    position: absolute;
+    width:96px;
+    height:96px;
+}
+div#direction-left {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    background: url("/finalgraphics/interface.png") 64px 0
+}
+div#direction-right {
+    position: absolute;
+    top: 32px;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background: url("/finalgraphics/interface.png") 0 0
+}
+div#direction-bottom {
+    position: absolute;
+    bottom: 0px;
+    left: 32px;
+    width: 32px;
+    height: 32px;
+    background: url("/finalgraphics/interface.png") 96px 0
+}
+div#direction-top {
+    position: absolute;
+    top: 0px;
+    left: 32px;
+    width: 32px;
+    height: 32px;
+    background: url("/finalgraphics/interface.png") 32px 0
+}

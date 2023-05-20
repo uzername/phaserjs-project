@@ -39,10 +39,10 @@ export class Player extends ActorMain {
                 
                 this.inputModeCurrent = inputMode.NONE;
                 MessageService.toggleDirectionsDisplay();
-                this.scene.talkToSomeone(this.x, this.y);
+                this.scene.talkToSomeone(this.x, this.y - UtilClass.SPRITEHEIGHT);
             } else {
                 // moving to front    
-                if (!this.scene.checkIsWall(this.x, this.y - UtilClass.SPRITEHEIGHT)) {
+                if (!this.scene.checkIsWall(this.x, this.y - UtilClass.SPRITEHEIGHT) && !this.scene.checkIsStoryNPC(this.x, this.y - UtilClass.SPRITEHEIGHT)) {
                     this.y -= UtilClass.SPRITEHEIGHT;
                 }
             }
@@ -52,10 +52,10 @@ export class Player extends ActorMain {
             if (this.inputModeCurrent === inputMode.TALK) {
                 this.inputModeCurrent = inputMode.NONE;
                 MessageService.toggleDirectionsDisplay();
-                this.scene.talkToSomeone(this.x, this.y);
+                this.scene.talkToSomeone(this.x - UtilClass.SPRITEWIDTH, this.y);
             } else {
                 // moving to left
-                if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y)) {
+                if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y) && !this.scene.checkIsStoryNPC(this.x - UtilClass.SPRITEWIDTH, this.y)) {
                     this.x -= UtilClass.SPRITEWIDTH;
                 }
             }
@@ -66,10 +66,10 @@ export class Player extends ActorMain {
             if (this.inputModeCurrent === inputMode.TALK) {
                 this.inputModeCurrent = inputMode.NONE;
                 MessageService.toggleDirectionsDisplay();
-                this.scene.talkToSomeone(this.x, this.y);
+                this.scene.talkToSomeone(this.x, this.y + UtilClass.SPRITEHEIGHT);
             } else {
                 // moving to back
-                if (!this.scene.checkIsWall(this.x, this.y + UtilClass.SPRITEHEIGHT)) {
+                if (!this.scene.checkIsWall(this.x, this.y + UtilClass.SPRITEHEIGHT) && !this.scene.checkIsStoryNPC(this.x, this.y + UtilClass.SPRITEHEIGHT)) {
                     this.y += UtilClass.SPRITEHEIGHT;
                 }
             }
@@ -79,10 +79,10 @@ export class Player extends ActorMain {
             if (this.inputModeCurrent === inputMode.TALK) {
                 this.inputModeCurrent = inputMode.NONE;
                 MessageService.toggleDirectionsDisplay();
-                this.scene.talkToSomeone(this.x, this.y);
+                this.scene.talkToSomeone(this.x + UtilClass.SPRITEWIDTH, this.y);
             } else {
                 // moving to right
-                if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y)) {
+                if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y) && !this.scene.checkIsStoryNPC(this.x + UtilClass.SPRITEWIDTH, this.y)) {
                     this.x += UtilClass.SPRITEWIDTH;
                 }
             }
@@ -92,10 +92,10 @@ export class Player extends ActorMain {
             if (this.inputModeCurrent === inputMode.TALK) {
                 this.inputModeCurrent = inputMode.NONE;
                 MessageService.toggleDirectionsDisplay();
-                this.scene.talkToSomeone(this.x, this.y);
+                this.scene.talkToSomeone(this.x + UtilClass.SPRITEWIDTH, this.y+UtilClass.SPRITEHEIGHT);
             } else {
                 // moving to right and back
-                if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT)) {
+                if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT) && !this.scene.checkIsStoryNPC(this.x + UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT) ) {
                     this.x += UtilClass.SPRITEWIDTH;
                     this.y += UtilClass.SPRITEHEIGHT;
                 }
@@ -106,10 +106,10 @@ export class Player extends ActorMain {
             if (this.inputModeCurrent === inputMode.TALK) {
                 this.inputModeCurrent = inputMode.NONE;
                 MessageService.toggleDirectionsDisplay();
-                this.scene.talkToSomeone(this.x, this.y);
+                this.scene.talkToSomeone(this.x - UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT);
             } else {
                 // moving to left and back
-                if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT)) {
+                if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT) && !this.scene.checkIsStoryNPC(this.x - UtilClass.SPRITEWIDTH, this.y + UtilClass.SPRITEHEIGHT) ) {
                     this.x -= UtilClass.SPRITEWIDTH;
                     this.y += UtilClass.SPRITEHEIGHT;
                 }
@@ -120,10 +120,10 @@ export class Player extends ActorMain {
             if (this.inputModeCurrent === inputMode.TALK) {
                 this.inputModeCurrent = inputMode.NONE;
                 MessageService.toggleDirectionsDisplay();
-                this.scene.talkToSomeone(this.x, this.y);
+                this.scene.talkToSomeone(this.x - UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT);
             } else {
                 // moving to left and front
-                if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT)) {
+                if (!this.scene.checkIsWall(this.x - UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT) && !this.scene.checkIsStoryNPC(this.x - UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT)) {
                     this.x -= UtilClass.SPRITEWIDTH;
                     this.y -= UtilClass.SPRITEHEIGHT;
                 }
@@ -134,10 +134,10 @@ export class Player extends ActorMain {
             if (this.inputModeCurrent === inputMode.TALK) {
                 this.inputModeCurrent = inputMode.NONE;
                 MessageService.toggleDirectionsDisplay();
-                this.scene.talkToSomeone(this.x, this.y);
+                this.scene.talkToSomeone(this.x + UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT);
             } else {
                 // moving to right and front
-                if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT)) {
+                if (!this.scene.checkIsWall(this.x + UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT) && !this.scene.checkIsStoryNPC(this.x + UtilClass.SPRITEWIDTH, this.y - UtilClass.SPRITEHEIGHT)) {
                     this.x += UtilClass.SPRITEWIDTH;
                     this.y -= UtilClass.SPRITEHEIGHT;
                 }

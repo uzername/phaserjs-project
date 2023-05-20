@@ -42,7 +42,7 @@ export class MessageService {
     } else {
             this.directionsDivHtmlObject.style.display = "none";
     }
-}
+    }
 
     static addMessage(textMsg) {
         const newDiv = document.createElement("div");

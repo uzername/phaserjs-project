@@ -1,4 +1,5 @@
 import { UtilClass } from './Utils.js'
+import { MessageService } from './MessageService.js'
 export class StoryMode {
     static currentMap = "map0"
     static storyState = "INIT" //INIT, PROLOGUE
@@ -69,7 +70,16 @@ export class StoryMode {
             
         }
 
+    }
+    // we talk to NPC 
+    static talkToNPC(strNPC_ID) {
+        var fetchedNPC = this.storyNPCs[this.currentMap][strNPC_ID];
+        if (fetchedNPC) {
+            MessageService.addMessage("You talk to: " + fetchedNPC.name);
+        } else {
+            MessageService.addMessage("You stare at them. Let's say, it's because of Goblin's low speech skill, but not because of programming error")
         }
+    }
 }
 
 export class Quest {

@@ -49,7 +49,7 @@ export class SceneMansion extends Phaser.Scene {
             MessageService.addMessage("You arrived to another location");
         }
     }
-
+    // add "talkable" NPCs to map
     loadActualNPCs(mapID) {
         this.currentNPCs.length = 0;
         for (var singleNPC in StoryMode.storyNPCs[mapID]) {
@@ -110,10 +110,42 @@ export class SceneMansion extends Phaser.Scene {
             }
             
     }
-    // try to talk to someone. Used to drive story. xPixel, yPixel - position of character in pixels
+    // try to talk to someone. Used to drive story. xPixel, yPixel - position of DESIRED dir. We can talk only to someone at nearby square
     talkToSomeone(xPixel, yPixel) {
+        for (var singleNPC in StoryMode.storyNPCs[StoryMode.currentMap]) {
+            var XC = StoryMode.storyNPCs[StoryMode.currentMap][singleNPC].coordX * UtilClass.SPRITEWIDTH + UtilClass.SPRITEWIDTH / 2;
+            var YC = StoryMode.storyNPCs[StoryMode.currentMap][singleNPC].coordY * UtilClass.SPRITEHEIGHT + StoryMode.storyNPCs[StoryMode.currentMap][singleNPC].sizeH / 2;
+            // it's a crutch I dunno
+            if (StoryMode.storyNPCs[StoryMode.currentMap][singleNPC].sizeH == UtilClass.SPRITEHEIGHTLARGE) {
+                YC += UtilClass.SPRITEHEIGHT / 2;
+            }
+            
+            if ((XC == xPixel) && (YC == yPixel)) {
+                // we found it, transfer handling to StoryMode
+                StoryMode.talkToNPC(singleNPC);
+            }
+        }
 
     }
+
+    checkIsStoryNPC(xPixel, yPixel) {
+        for (var singleNPC in StoryMode.storyNPCs[StoryMode.currentMap]) {
+            var XC = StoryMode.storyNPCs[StoryMode.currentMap][singleNPC].coordX * UtilClass.SPRITEWIDTH + UtilClass.SPRITEWIDTH / 2;
+            var YC = StoryMode.storyNPCs[StoryMode.currentMap][singleNPC].coordY * UtilClass.SPRITEHEIGHT + StoryMode.storyNPCs[StoryMode.currentMap][singleNPC].sizeH / 2;
+            // it's a crutch I dunno
+            if (StoryMode.storyNPCs[StoryMode.currentMap][singleNPC].sizeH == UtilClass.SPRITEHEIGHTLARGE) {
+                YC += UtilClass.SPRITEHEIGHT / 2;
+            }
+
+            if ((XC == xPixel) && (YC == yPixel)) {
+                // we found it
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     // try to use something. xPixel, yPixel - position of character in pixels
     useSomething(xPixel, yPixel) {
         // try to close door       

@@ -8,9 +8,11 @@ function TurnSystem_Energy () {
 	depending on the current game speed (potentially customizable), a certain amount of energy is restored to every actor every tick. Games such as Dwarf Fortress use this approach.
 	*/
 	this.allActors = [];
+	
 }
 
 function TurnActor(name, maxEnergy) {
 	this.name = name;
 	this.maxEnergy = maxEnergy;
+	this.currentEnergy = 0;
 }

@@ -10,9 +10,19 @@ function TurnSystem_Energy () {
 	this.allActors = [];
 	
 }
-
-function TurnActor(name, maxEnergy) {
+/**
+* Expresses Turn Agent entity
+*/
+function TurnActor(name, maxEnergy, initialEnergy) {
 	this.name = name;
 	this.maxEnergy = maxEnergy;
-	this.currentEnergy = 0;
+	this.currentEnergy = initialEnergy;
+	this.energyRecoverRate
+	/**
+	* a function that performs real action of actor. Declared in TurnSystem_EnergyActionResolver.js for your case, and passed here, as it is allowed in JS.
+	* TurnSystem Energy knows nothing about AI of actors, it just manages turns of actors. Analog of Delegate in C# or func ptr in C.
+	*/
+	// this.performAction = null;
+	// Turn system knows nothing about AI! But AI may be aware of Turn System
+	
 }

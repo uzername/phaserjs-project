@@ -1,25 +1,5 @@
 // specific to html test file
-// http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
-var rand = function (min, max) {
-    return Math.random() * (max - min) + min;
-};
-var getRandomItem = function (list, weight) {
-    var total_weight = weight.reduce(function (prev, cur, i, arr) {
-        return prev + cur;
-    });
-    var random_num = rand(0, total_weight);
-    var weight_sum = 0;
-    //console.log(random_num)     
-    for (var i = 0; i < list.length; i++) {
-        weight_sum += weight[i];
-        weight_sum = +weight_sum.toFixed(2);
 
-        if (random_num <= weight_sum) {
-            return list[i];
-        }
-    }
-    // end of function
-};
 // canvas got blurry...
 var PIXEL_RATIO = (function () {
     var ctx = document.createElement("canvas").getContext("2d"),
@@ -91,7 +71,7 @@ function GamefieldRenderer() {
 	this.allTiles = {
 		actors:[{type:"gardengnome",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'g'},
 			    {type:"badbug",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'b'},
-			    {type:"flower",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'f'}], 
+			    {type:"fineflower",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'f'}], 
 		terrain: [{type:"ground",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'.'},
 				{type:"water",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'~'},
 				{type:"wall",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'#'}]

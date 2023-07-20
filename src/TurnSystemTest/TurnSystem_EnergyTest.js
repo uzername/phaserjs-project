@@ -24,72 +24,81 @@ var setHiDPICanvas = function(canvas, w, h, ratio) {
 }
 
 
-function GamefieldParameters(in_horSym, in_verSym, in_symSz) {
-    /**
-     * number of symbols: horizontal and vertical direction
-     */
-    this.horizontalFieldSz = in_horSym;
-    this.verticalFieldSz = in_verSym;
-    /**
-    * size of font in pixels
-    */
-    this.fontSz = in_symSz;
-    this.gamefieldFontWeight = "bold";
-	this.gamefieldFontName = "monospace";
-    /**
-    * width of symbol displayed on canvas. Calculated in main_init, should not be changed by user
-    */
-    this.symbolWidth = 0;
-    /**
-    * here is stored canvas JS object
-    */
-    this.canvasItm = null;
-    this.canvasCtx = null;
-
+class GamefieldParameters {
+    constructor(in_horSym, in_verSym, in_symSz) {
+        /**
+         * number of symbols: horizontal and vertical direction
+         */
+        this.horizontalFieldSz = in_horSym;
+        this.verticalFieldSz = in_verSym;
+        /**
+        * size of font in pixels
+        */
+        this.fontSz = in_symSz;
+        this.gamefieldFontWeight = "bold";
+        this.gamefieldFontName = "monospace";
+        /**
+        * width of symbol displayed on canvas. Calculated in main_init, should not be changed by user
+        */
+        this.symbolWidth = 0;
+        /**
+        * here is stored canvas JS object
+        */
+        this.canvasItm = null;
+        this.canvasCtx = null;
+    }
 }
+// it is for rencering map or part of it on canvas. Map is in energyActionResolverInst.CurrentMap
+class GamefieldRenderer {
+    constructor() {
+        /**
+        *cached pre-rendered fragments
+        */
+        this.gamefieldCache = [];
 
-function GamefieldRenderer() {
-	/**
-	*cached pre-rendered fragments
-	*/
-	this.gamefieldCache = [];
-
-	/**
-	*graphical renderer
-	*/
-    this.instGamefield = new GamefieldParameters(80,25,15);	
-	this.instGamefield.canvasItm = document.getElementById("gamefield");
-	this.instGamefield.canvasCtx = this.instGamefield.canvasItm.getContext('2d');
-	this.instGamefield.canvasCtx.font = ""+this.instGamefield.gamefieldFontWeight+" "+this.instGamefield.fontSz+"px "+this.instGamefield.gamefieldFontName;
-	this.instGamefield.symbolWidth = Math.ceil(this.instGamefield.canvasCtx.measureText("W").width); 
-	this.instGamefield.canvasItm.width = this.instGamefield.horizontalFieldSz* this.instGamefield.symbolWidth;
-	this.instGamefield.canvasItm.height = this.instGamefield.verticalFieldSz* this.instGamefield.fontSz;
-	setHiDPICanvas(this.instGamefield.canvasItm, this.instGamefield.horizontalFieldSz* this.instGamefield.symbolWidth, this.instGamefield.verticalFieldSz* this.instGamefield.fontSz);
-	/**
-	* How to render objects on field
-	*/
-	this.allTiles = {
-		actors:[{type:"gardengnome",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'g'},
-			    {type:"badbug",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'b'},
-			    {type:"fineflower",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'f'}], 
-		terrain: [{type:"ground",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'.'},
-				{type:"water",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'~'},
-				{type:"wall",fg:'rgb(0,0,0)',bg:'rgb(255,255,255)', sym:'#'}]
-		}
-	
+        /**
+        *graphical renderer
+        */
+        this.instGamefield = new GamefieldParameters(80, 25, 15);
+        this.instGamefield.canvasItm = document.getElementById("gamefield");
+        this.instGamefield.canvasCtx = this.instGamefield.canvasItm.getContext('2d');
+        this.instGamefield.canvasCtx.font = "" + this.instGamefield.gamefieldFontWeight + " " + this.instGamefield.fontSz + "px " + this.instGamefield.gamefieldFontName;
+        this.instGamefield.symbolWidth = Math.ceil(this.instGamefield.canvasCtx.measureText("W").width);
+        this.instGamefield.canvasItm.width = this.instGamefield.horizontalFieldSz * this.instGamefield.symbolWidth;
+        this.instGamefield.canvasItm.height = this.instGamefield.verticalFieldSz * this.instGamefield.fontSz;
+        setHiDPICanvas(this.instGamefield.canvasItm, this.instGamefield.horizontalFieldSz * this.instGamefield.symbolWidth, this.instGamefield.verticalFieldSz * this.instGamefield.fontSz);
+        /**
+        * How to render objects on field
+        */
+        this.allTiles = {
+            actors: [{ type: "gardengnome", fg: 'rgb(0,0,0)', bg: 'rgb(255,255,255)', sym: 'g' },
+            { type: "badbug", fg: 'rgb(0,0,0)', bg: 'rgb(255,255,255)', sym: 'b' },
+            { type: "fineflower", fg: 'rgb(0,0,0)', bg: 'rgb(255,255,255)', sym: 'f' }],
+            terrain:
+                [{ type: "ground", fg: 'rgb(0,0,0)', bg: 'rgb(255,255,255)', sym: '.' },
+            { type: "water", fg: 'rgb(0,0,0)', bg: 'rgb(255,255,255)', sym: '~' },
+            { type: "wall", fg: 'rgb(0,0,0)', bg: 'rgb(255,255,255)', sym: '#' }]
+        }
+    }
     /**
     * completely fill the gamefield
     */
-    this.renderGamefieldComplete = function () {
+    renderGamefieldComplete() {
+        console.log(this.instGamefield);
         //draw_character([5, 3, ',', 'rgb(0,0,255)', 'rgb(0,0,0)']);
         for (var hor = 0; hor < this.instGamefield.horizontalFieldSz; hor++) {
             for (var ver = 0; ver < this.instGamefield.verticalFieldSz; ver++) {
-                this.draw_character([hor, ver, '.', 'rgb(0,0,0)', 'rgb(255,255,255)']);
+                var tileIndex = energyActionResolverInst.CurrentMap[ver][hor];
+                console.log(hor, ver);
+                this.draw_character([hor, ver, this.allTiles.terrain[tileIndex].sym, this.allTiles.terrain[tileIndex].fg, this.allTiles.terrain[tileIndex].bg]);
             }
         }
     }
-	
-    this.draw_character=function (data) {
+	/**
+     * draw symbol on field. takes array data[]
+     * data[0] - x coord; data[1] - y coord; data[2] - character; data[3] - string with 'rgb(...,...,...)' format for foreground; data[4] - background color
+     * */
+    draw_character(data) {
     var x = data[0];
     var y = data[1];
     var ch = data[2]; //character
@@ -123,10 +132,16 @@ function GamefieldRenderer() {
 }
 
 
-// here be the main routine
+/**
+ * Entry point
+ * */
 function MainRoutine() {
-	var instGamefieldRenderer = new GamefieldRenderer();
-	instGamefieldRenderer.renderGamefieldComplete();
+    var instGamefieldRenderer = new GamefieldRenderer();
+    // declared in TurnSystem_EnergyActionResolver.js . 
+    energyActionResolverInst = new TurnSystem_EnergyActionResolver();
+
+    instGamefieldRenderer.renderGamefieldComplete();
+    instGamefieldRenderer.renderActors();
 	//add there onclick event for NEXT TURN button
 }
 

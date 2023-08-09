@@ -89,10 +89,19 @@ class GamefieldRenderer {
         for (var hor = 0; hor < this.instGamefield.horizontalFieldSz; hor++) {
             for (var ver = 0; ver < this.instGamefield.verticalFieldSz; ver++) {
                 var tileIndex = energyActionResolverInst.CurrentMap[ver][hor];
-                console.log(hor, ver);
+                //console.log(hor, ver);
                 this.draw_character([hor, ver, this.allTiles.terrain[tileIndex].sym, this.allTiles.terrain[tileIndex].fg, this.allTiles.terrain[tileIndex].bg]);
             }
         }
+    }
+
+    renderActors() {
+        energyActionResolverInst.turnSystem_EnergyInst.allActors.forEach((element) => {
+            var hor = element.Xpos; var ver = element.Ypos;
+            var tileIndex = element.tileIndex;
+            this.draw_character([hor, ver, this.allTiles.actors[tileIndex].sym, this.allTiles.actors[tileIndex].fg, this.allTiles.actors[tileIndex].bg]);
+            }
+        );
     }
 	/**
      * draw symbol on field. takes array data[]

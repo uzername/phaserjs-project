@@ -1,4 +1,3 @@
-// http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
 var rand = function (min, max) {
     return Math.random() * (max - min) + min;
 };
@@ -19,8 +18,8 @@ var getRandomItem = function (list, weight) {
     }
     // end of function
 };
-
+// http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
 // https://stackoverflow.com/questions/5915096/get-a-random-item-from-a-javascript-array
-function get_random (list) {
-  return list[Math.floor((Math.random()*list.length))];
-}
+var get_random = function (list) {
+    return list[Math.floor((Math.random() * list.length))];
+};

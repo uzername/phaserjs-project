@@ -18,10 +18,39 @@
 </head>
 <body>
     <h3>Turn Based Energy Approach</h3>
-    <canvas id="gamefield" tabindex="1">Here be TURN SYSTEM</canvas>	
+    <canvas id="gamefield" tabindex="1">Here be TURN SYSTEM</canvas>
+    
+    <!-- <script scr="./RandUtils.js"></script> -->
+    <script type="text/javascript" > 
+        var rand = function (min, max) {
+            return Math.random() * (max - min) + min;
+        };
+        var getRandomItem = function (list, weight) {
+            var total_weight = weight.reduce(function (prev, cur, i, arr) {
+                return prev + cur;
+            });
+            var random_num = rand(0, total_weight);
+            var weight_sum = 0;
+            //console.log(random_num)     
+            for (var i = 0; i < list.length; i++) {
+                weight_sum += weight[i];
+                weight_sum = +weight_sum.toFixed(2);
+
+                if (random_num <= weight_sum) {
+                    return list[i];
+                }
+            }
+            // end of function
+        };
+        // http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
+        // https://stackoverflow.com/questions/5915096/get-a-random-item-from-a-javascript-array
+        var get_random = function (list) {
+            return list[Math.floor((Math.random() * list.length))];
+        }; 
+    </script>
     <script src="../TurnSystem_Energy.js"></script>
-	<script scr="./RandUtils.js"></script>
-	<script src="./TurnSystem_EnergyActionResolver.js"></script>
+
+    <script src="./TurnSystem_EnergyActionResolver.js"></script>
     <script src="./TurnSystem_EnergyTest.js"></script>
 </body>
 </html>

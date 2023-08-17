@@ -151,7 +151,12 @@ function MainRoutine() {
 
     instGamefieldRenderer.renderGamefieldComplete();
     instGamefieldRenderer.renderActors();
-	//add there onclick event for NEXT TURN button
+    //add there onclick event for NEXT TURN button
+    document.getElementById("nextTurnBtn").onclick = function () {
+        energyActionResolverInst.turnSystem_EnergyInst.nextStep();
+        instGamefieldRenderer.renderGamefieldComplete();
+        instGamefieldRenderer.renderActors();
+    }
 }
 
 MainRoutine();

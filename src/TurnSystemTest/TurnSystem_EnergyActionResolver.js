@@ -64,6 +64,8 @@ class TurnSystem_EnergyActionResolver {
 }
 // this should be initialized in TurnSystem_EnergyTest::MainRoutine
 energyActionResolverInst = null;
+// place where to put text messages
+logBoxReference = null;
 /**
 * subclass from TurnActor. Contains info about turn-related stuff. Make sure that TurnSystem_Energy is added first and RandUtils
 */
@@ -78,7 +80,9 @@ class GardenGnomeActor extends TurnActor {
 		var maxEnergy0 = rand(40, 80);
 		var initialRecoveryRate0 = rand(3, 10);
 		var initialEnergy0 = rand(0, maxEnergy0);
+
 		super(name0, maxEnergy0, initialEnergy0, initialRecoveryRate0);
+		this.energyCost_step = 5;
 
 		var initialMaxHP = 100;
 
@@ -93,7 +97,21 @@ class GardenGnomeActor extends TurnActor {
 		this.tileIndex = 0;
 	}
 	performAction() {
-	
+		// only walk now
+		if (this.currentEnergy > this.energyCost_step) {
+			this.currentEnergy -= this.energyCost_step;
+			var canProceed = false; var attempts = 0; var maxAttempts = 5;
+			while (canProceed == false) {
+				if (attempts >= maxAttempts) return;
+				var desiredPositionX = this.Xpos + get_random([-1, 0, 1]);
+				var desiredPositionY = this.Ypos + get_random([-1, 0, 1]);
+				if (energyActionResolverInst.CurrentMap[desiredPositionY][desiredPositionX] == 2) {
+					this.Xpos = desiredPositionX;
+					this.Ypos = desiredPositionY;
+					canProceed = true;
+				} else { attempts += 1; }
+			}
+		}
 	}
 }
 
@@ -110,6 +128,7 @@ class BadBugActor extends TurnActor {
 		var initialEnergy0 = rand(0, maxEnergy0);
 
 		super (name0, maxEnergy0, initialEnergy0, initialRecoveryRate0);
+		this.energyCost_step = 5;
 
 		var initialMaxHP = 30;
 
@@ -122,6 +141,20 @@ class BadBugActor extends TurnActor {
 		this.tileIndex = 1;
 	}
 	performAction() {
-	
+		// only walk now
+		if (this.currentEnergy > this.energyCost_step) {
+			var canProceed = false; var attempts = 0; var maxAttempts = 5;
+			while (canProceed == false) {
+				if (attempts >= maxAttempts) return;
+				var desiredPositionX = this.Xpos + get_random([-1, 0, 1]);
+				var desiredPositionY = this.Ypos + get_random([-1, 0, 1]);
+				if (energyActionResolverInst.CurrentMap[desiredPositionY][desiredPositionX] == 2) {
+					this.Xpos = desiredPositionX;
+					this.Ypos = desiredPositionY;
+					canProceed = true;
+				} else { attempts += 1; }
+			}
+			
+		}
 	}
 }

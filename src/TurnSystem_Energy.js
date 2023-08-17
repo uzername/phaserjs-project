@@ -13,8 +13,8 @@ class TurnSystem_Energy  {
 		*/
 		this.allActors = [];		
 	}
-	nextStep() {
-		for (var actorSel in this.allActors) {
+	nextStep() {		
+		for (const actorSel of this.allActors) {
 			actorSel.recoverEnergy();
 			actorSel.performAction();
         }
@@ -24,21 +24,13 @@ class TurnSystem_Energy  {
 * Expresses Turn Agent entity
 */
 class TurnActor {
-	constructor (name, maxEnergy, initialEnergy, initialRecoveryRate) {
+	constructor(name, maxEnergy, initialEnergy, initialRecoveryRate)
+	{
 	this.name = name;
 	this.maxEnergy = maxEnergy;
 	this.currentEnergy = initialEnergy;
 	this.energyRecoverRate = initialRecoveryRate;
-	}
-	/**
-	 * recover energy and clamp on maximum
-	 * */
-	recoverEnergy() {
-		this.currentEnergy += this.energyRecoverRate;
-		if (this.currentEnergy > this.maxEnergy) {
-			this.currentEnergy = this.maxEnergy;
-		}
-	}
+	}	
 	/**
 	* a function that performs real action of actor. Declared in TurnSystem_EnergyActionResolver.js for this case, and passed here, as it is allowed in JS.
 	* TurnSystem Energy knows nothing about AI of actors, it just manages turns of actors. It does not have to know about coordinates too. it is more about action AI
@@ -48,5 +40,13 @@ class TurnActor {
 
 	}
 	// Turn system knows nothing about AI! But AI may be aware of Turn System
-	
+	/**
+	 * recover energy and clamp on maximum
+	 * */
+	recoverEnergy() {
+		this.currentEnergy += this.energyRecoverRate;
+		if (this.currentEnergy > this.maxEnergy) {
+			this.currentEnergy = this.maxEnergy;
+		}
+	}
 }
